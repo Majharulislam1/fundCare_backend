@@ -36,6 +36,7 @@ async function run() {
     const database1 = client.db("Volunteer_need_post");
     const Volunteer_need_post = database1.collection("Volunteer");
 
+
     app.post('/volunteer_need_post', async (req, res) => {
       const data = req.body;
       const result = await Volunteer_need_post.insertOne(data);
@@ -44,6 +45,13 @@ async function run() {
 
     app.get('/volunteer_needs', async (req, res) => {
       const cursor = Volunteer_need_post.find().sort({ Deadline: 1 }).limit(6);
+      const result = await cursor.toArray();
+      res.send(result);
+    })
+
+
+    app.get('/all_volunteer',async(req,res)=>{
+      const cursor = Volunteer_need_post.find();
       const result = await cursor.toArray();
       res.send(result);
     })
