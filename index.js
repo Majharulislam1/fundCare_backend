@@ -56,6 +56,14 @@ async function run() {
       res.send(result);
     })
 
+    app.get('/Search_volunteer', async (req, res) => {
+         const { title } = req.query;  
+         console.log(req.query);
+        const volunteers =  Volunteer_need_post.find({ title: { $regex: title || '', $options: 'i' } })
+        const result = await volunteers.toArray();
+        res.send(result);
+    });
+
      
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
