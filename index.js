@@ -15,7 +15,7 @@ app.get('/',async(req,res)=>{
 })
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.5g7cb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -35,6 +35,7 @@ async function run() {
      
     const database1 = client.db("Volunteer_need_post");
     const Volunteer_need_post = database1.collection("Volunteer");
+    const Volunteer_request = database1.collection('Volunteer_request');
 
 
     app.post('/volunteer_need_post', async (req, res) => {
@@ -55,6 +56,35 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     })
+
+
+    app.get('/volunteer_details/:id', async (req, res) => {
+      const { id } = req.params;
+      const query = { _id: new ObjectId(id) };
+      const data = await Volunteer_need_post.findOne(query);
+      res.send(data);
+    })
+
+    app.post('/volunteer_request',async (req,res)=>{
+        const data = req.body;
+        const result = await Volunteer_request.insertOne(data);
+        res.send(result);
+    })
+
+    app.patch('/volunteer_decrement/:id', async (req,res)=>{
+      const { id } = req.params;
+      
+     
+      
+
+      
+      const result = await Volunteer_need_post.updateOne(
+        { _id: new ObjectId(id) },  
+        { $inc: { volunteers_needed: -1 } }  
+      );
+      res.send(result);
+    })
+
 
     app.get('/Search_volunteer', async (req, res) => {
          const { title } = req.query;  
