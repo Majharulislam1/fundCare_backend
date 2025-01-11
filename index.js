@@ -73,17 +73,14 @@ async function run() {
 
     app.patch('/volunteer_decrement/:id', async (req,res)=>{
       const { id } = req.params;
-      
-     
-      
-
-      
       const result = await Volunteer_need_post.updateOne(
         { _id: new ObjectId(id) },  
         { $inc: { volunteers_needed: -1 } }  
       );
       res.send(result);
     })
+
+
 
 
     app.get('/Search_volunteer', async (req, res) => {
@@ -93,6 +90,47 @@ async function run() {
         const result = await volunteers.toArray();
         res.send(result);
     });
+
+    app.get('/my_volunteer_need_post/:id', async(req,res)=>{
+         const {id} = req.params;
+         const reviews = await Volunteer_need_post.find({ email: id }).toArray();
+         res.send(reviews);
+    })
+
+
+    app.put('/update_need_post/:id', async (req, res) => {
+      const id = req.params.id;
+      const data = req.body;
+      const options = { upsert: true };
+      const query = { _id: new ObjectId(id) };
+
+       
+
+      const updateDoc = {
+        $set: {
+          cover_img: data.cover_img,
+          title: data.title,
+          description: data.description,
+          category: data.category,
+          volunteers_needed: data.volunteers_needed,
+          Deadline:data.Deadline,
+          location:data.location
+        },
+      };
+      const result = await Volunteer_need_post.updateOne(query, updateDoc, options);
+
+      res.send(result);
+
+
+    })
+
+
+    app.delete('/delete_volunteer_post/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await Volunteer_need_post.deleteOne(query);
+      res.send(result);
+    })
 
      
     await client.db("admin").command({ ping: 1 });
