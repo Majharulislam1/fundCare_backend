@@ -97,6 +97,12 @@ async function run() {
          res.send(reviews);
     })
 
+    app.get('/my_volunteer_request_post/:id', async(req,res)=>{
+        const {id} = req.params;
+        const request = await Volunteer_request.find({ volunteer_email: id }).toArray();
+        res.send(request);
+    })
+
 
     app.put('/update_need_post/:id', async (req, res) => {
       const id = req.params.id;
@@ -129,6 +135,13 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await Volunteer_need_post.deleteOne(query);
+      res.send(result);
+    })
+
+    app.delete('/delete_request/:id', async(req,res)=>{
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await Volunteer_request.deleteOne(query);
       res.send(result);
     })
 
