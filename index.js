@@ -3,6 +3,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 
 app.use(express.json());
 app.use(cors());
@@ -36,6 +37,11 @@ async function run() {
     const database1 = client.db("Volunteer_need_post");
     const Volunteer_need_post = database1.collection("Volunteer");
     const Volunteer_request = database1.collection('Volunteer_request');
+
+
+     
+
+
 
 
     app.post('/volunteer_need_post', async (req, res) => {
@@ -146,11 +152,10 @@ async function run() {
     })
 
      
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    
   } finally {
     
-    // await client.close();
+     
   }
 }
 run().catch(console.dir);
