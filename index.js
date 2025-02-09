@@ -31,7 +31,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
      
-    await client.connect();
+    
 
      
     const database1 = client.db("Volunteer_need_post");
@@ -51,7 +51,7 @@ async function run() {
     })
 
     app.get('/volunteer_needs', async (req, res) => {
-      const cursor = Volunteer_need_post.find().sort({ Deadline: 1 }).limit(6);
+      const cursor = Volunteer_need_post.find().limit(6);
       const result = await cursor.toArray();
       res.send(result);
     })
